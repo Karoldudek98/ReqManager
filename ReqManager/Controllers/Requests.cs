@@ -45,26 +45,25 @@ namespace ReqManager.Controllers
         // GET: Requests/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View(reqs.FirstOrDefault(x => x.Id == id));
         }
 
         // POST: Requests/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, RequestModel requestmodel)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            RequestModel requestmodel1 = reqs.FirstOrDefault(x => x.Id == id);
+            requestmodel1.Description = requestmodel.Description;
+            requestmodel1.ShortDescription = requestmodel.ShortDescription;
+            requestmodel1.Comment = requestmodel.Comment;
+            requestmodel1.Status = requestmodel.Status;
+
+            return RedirectToAction("Index");
         }
 
-        // GET: Requests/Delete/5
-        public ActionResult Delete(int id)
+            // GET: Requests/Delete/5
+            public ActionResult Delete(int id)
         {
             return View();
         }
