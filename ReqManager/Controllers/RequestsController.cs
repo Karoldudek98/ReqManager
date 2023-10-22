@@ -23,7 +23,7 @@ namespace ReqManager.Controllers
         // GET: Requests/Details/5
         public ActionResult Details(int id)
         {
-            return View(reqs.FirstOrDefault(x=>x.Id== id));
+            return View(reqs.FirstOrDefault(x => x.Id == id));
         }
 
         // GET: Requests/Create
@@ -66,22 +66,18 @@ namespace ReqManager.Controllers
             // GET: Requests/Delete/5
             public ActionResult Delete(int id)
         {
-            return View();
+            return View(reqs.FirstOrDefault(x => x.Id == id));
         }
 
         // POST: Requests/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, RequestModel requestmodel)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            RequestModel requestmodel1 = reqs.FirstOrDefault(x => x.Id == id);
+            reqs.Remove(requestmodel1);
+            return RedirectToAction("index");
+
         }
     }
 }
