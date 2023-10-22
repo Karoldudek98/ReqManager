@@ -76,7 +76,7 @@ namespace ReqManager.Controllers
         {
             RequestModel requestmodel1 = reqs.FirstOrDefault(x => x.Id == id);
             reqs.Remove(requestmodel1);
-            return RedirectToAction("index");
+            return RedirectToAction("Index");
 
         }
     }
