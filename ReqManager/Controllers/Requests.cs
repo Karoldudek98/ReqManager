@@ -58,6 +58,7 @@ namespace ReqManager.Controllers
             requestmodel1.ShortDescription = requestmodel.ShortDescription;
             requestmodel1.Comment = requestmodel.Comment;
             requestmodel1.Status = requestmodel.Status;
+            requestmodel1.Created = requestmodel.Created;
 
             return RedirectToAction("Index");
         }
