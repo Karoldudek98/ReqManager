@@ -1,29 +1,31 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ReqManager.Models;
+using System.Linq;
 
 namespace ReqManager.Controllers
 {
-    public class Requests : Controller
+    public class RequestsController : Controller
     {
+        private readonly RequestDbContext _context;
 
-        private static IList<RequestModel> reqs = new List<RequestModel>()
+        public RequestsController(RequestDbContext context)
         {
-            new RequestModel(){Id = 1 , ShortDescription = "Laptop issue", Description = "My laptop can't turn on, please help me", Comment = " ", Status = RequestStatus.Open, Created = DateTime.Now},
-            new RequestModel(){Id = 2 , ShortDescription = "Headphones dies", Description = "Please replace my headset", Comment = " ", Status = RequestStatus.Open, Created = DateTime.Now},
-            new RequestModel(){Id = 3 , ShortDescription = "External display", Description = "I need 2nd monitor for my work", Comment = " ", Status = RequestStatus.InProgress, Created = DateTime.Now},
-        };
+            _context = context;
+        }
 
         // GET: Requests
-        public ActionResult Index()
+        public IActionResult Index()
         {
+            var reqs = _context.Requests.ToList();
             return View(reqs);
         }
 
         // GET: Requests/Details/5
         public ActionResult Details(int id)
         {
-            return View(reqs.FirstOrDefault(x => x.Id == id));
+            var request = _context.Requests.FirstOrDefault(x => x.Id == id);
+            return View(request);
         }
 
         // GET: Requests/Create
@@ -37,16 +39,23 @@ namespace ReqManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(RequestModel requestmodel)
         {
-            requestmodel.Id = reqs.Count + 1;
-            requestmodel.Created = DateTime.Now;
-            reqs.Add(requestmodel);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                requestmodel.Created = DateTime.Now;
+                requestmodel.Status = RequestStatus.Open;
+                _context.Requests.Add(requestmodel);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(requestmodel);
         }
 
         // GET: Requests/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(reqs.FirstOrDefault(x => x.Id == id));
+            var request = _context.Requests.FirstOrDefault(x => x.Id == id);
+            return View(request);
         }
 
         // POST: Requests/Edit/5
@@ -54,30 +63,37 @@ namespace ReqManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, RequestModel requestmodel)
         {
-            RequestModel requestmodel1 = reqs.FirstOrDefault(x => x.Id == id);
-            requestmodel1.Description = requestmodel.Description;
-            requestmodel1.ShortDescription = requestmodel.ShortDescription;
-            requestmodel1.Comment = requestmodel.Comment;
-            requestmodel1.Status = requestmodel.Status;
+            if (ModelState.IsValid)
+            {
+                var existingRequest = _context.Requests.FirstOrDefault(x => x.Id == id);
+                existingRequest.Description = requestmodel.Description;
+                existingRequest.ShortDescription = requestmodel.ShortDescription;
+                existingRequest.Comment = requestmodel.Comment;
+                existingRequest.Status = requestmodel.Status;
 
-            return RedirectToAction("Index");
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(requestmodel);
         }
 
-            // GET: Requests/Delete/5
-            public ActionResult Delete(int id)
+        // GET: Requests/Delete/5
+        public ActionResult Delete(int id)
         {
-            return View(reqs.FirstOrDefault(x => x.Id == id));
+            var request = _context.Requests.FirstOrDefault(x => x.Id == id);
+            return View(request);
         }
 
         // POST: Requests/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, RequestModel requestmodel)
+        public ActionResult DeleteConfirmed(int id)
         {
-            RequestModel requestmodel1 = reqs.FirstOrDefault(x => x.Id == id);
-            reqs.Remove(requestmodel1);
+            var request = _context.Requests.FirstOrDefault(x => x.Id == id);
+            _context.Requests.Remove(request);
+            _context.SaveChanges();
             return RedirectToAction("Index");
-
         }
     }
 }

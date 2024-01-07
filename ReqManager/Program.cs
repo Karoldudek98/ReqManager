@@ -1,3 +1,7 @@
+using ReqManager.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+
 namespace ReqManager
 {
     public class Program
@@ -5,6 +9,10 @@ namespace ReqManager
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<RequestDbContext>(options=> options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+
+            builder.Services.AddDbContext<RequestDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")).LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
