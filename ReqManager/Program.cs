@@ -1,6 +1,9 @@
 using ReqManager.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
+using Microsoft.AspNetCore.Identity;
+using ReqManager.Data;
+using ReqManager.Areas.Identity.Data;
 
 namespace ReqManager
 {
@@ -11,6 +14,8 @@ namespace ReqManager
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<RequestDbContext>(options=> options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+
+            builder.Services.AddDefaultIdentity<ReqManagerUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ReqManagerContext>();
 
             builder.Services.AddDbContext<RequestDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")).LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
