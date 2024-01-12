@@ -13,7 +13,9 @@ namespace ReqManager
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<RequestDbContext>(options=> options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+            builder.Services.AddDbContext<RequestDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+
+            builder.Services.AddDbContext<ReqManagerContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
             builder.Services.AddDefaultIdentity<ReqManagerUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ReqManagerContext>();
 
@@ -33,11 +35,14 @@ namespace ReqManager
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",
