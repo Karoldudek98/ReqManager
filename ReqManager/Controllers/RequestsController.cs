@@ -20,8 +20,20 @@ namespace ReqManager.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var reqs = _context.Requests.ToList();
-            return View(reqs);
+            if (User.IsInRole("Client"))
+            {
+                // Get the email address of the currently logged-in client
+                string currentClientEmail = User.Identity.Name;
+
+                // Filter requests to only show those created by the current client
+                var clientRequests = _context.Requests.Where(r => r.CreatedBy == currentClientEmail).ToList();
+
+                return View(clientRequests);
+            } else 
+            {
+                var reqs = _context.Requests.ToList();
+                return View(reqs);
+            }
         }
 
         // GET: Requests/Details/5
