@@ -31,6 +31,6 @@ namespace ReqManager.Models
         [Column(TypeName = "datetime")]
         public DateTime Created { get; set; }
 
-        public string UserId { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

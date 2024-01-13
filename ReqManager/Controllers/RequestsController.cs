@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReqManager.Models;
 using System.Linq;
+using System.Security.Claims;
 
 namespace ReqManager.Controllers
 {
@@ -45,6 +46,9 @@ namespace ReqManager.Controllers
             {
                 requestmodel.Created = DateTime.Now;
                 requestmodel.Status = RequestStatus.Open;
+
+                requestmodel.CreatedBy = User.Identity.Name;
+
                 _context.Requests.Add(requestmodel);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
