@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReqManager.Models;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace ReqManager.Controllers
         }
 
         // GET: Requests
+        [Authorize]
         public IActionResult Index()
         {
             var reqs = _context.Requests.ToList();

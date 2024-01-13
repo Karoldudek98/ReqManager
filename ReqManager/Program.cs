@@ -4,6 +4,8 @@ using System.Configuration;
 using Microsoft.AspNetCore.Identity;
 using ReqManager.Data;
 using ReqManager.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ReqManager
 {
@@ -17,9 +19,11 @@ namespace ReqManager
 
             builder.Services.AddDbContext<ReqManagerContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
-            builder.Services.AddDefaultIdentity<ReqManagerUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ReqManagerContext>();
+            builder.Services.AddDefaultIdentity<ReqManagerUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ReqManagerContext>();
 
             builder.Services.AddDbContext<RequestDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")).LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -43,6 +47,9 @@ namespace ReqManager
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+
+
 
             app.MapControllerRoute(
                 name: "default",
