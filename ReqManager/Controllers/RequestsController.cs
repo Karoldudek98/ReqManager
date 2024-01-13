@@ -85,6 +85,7 @@ namespace ReqManager.Controllers
         }
 
         // GET: Requests/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             var request = _context.Requests.FirstOrDefault(x => x.Id == id);
@@ -92,6 +93,7 @@ namespace ReqManager.Controllers
         }
 
         // POST: Requests/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
