@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReqManager.Models;
 
@@ -11,9 +12,11 @@ using ReqManager.Models;
 namespace ReqManager.Migrations
 {
     [DbContext(typeof(RequestDbContext))]
-    partial class RequestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240113093613_Initialv2")]
+    partial class Initialv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

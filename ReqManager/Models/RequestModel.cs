@@ -30,5 +30,7 @@ namespace ReqManager.Models
         [Required]
         [Column(TypeName = "datetime")]
         public DateTime Created { get; set; }
+
+        public string UserId { get; set; }
     }
 }
