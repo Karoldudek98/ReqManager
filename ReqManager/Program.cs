@@ -6,6 +6,7 @@ using ReqManager.Data;
 using ReqManager.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace ReqManager
 {
@@ -23,7 +24,17 @@ namespace ReqManager
 
             builder.Services.AddDbContext<RequestDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")).LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
 
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

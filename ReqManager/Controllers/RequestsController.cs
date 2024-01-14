@@ -50,6 +50,7 @@ namespace ReqManager.Controllers
         }
 
         // POST: Requests/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(RequestModel requestmodel)
